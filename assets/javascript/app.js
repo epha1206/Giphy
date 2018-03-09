@@ -7,5 +7,42 @@ function createButtons() {
         var cartoonBtn = $('<button>').text(cartoonTitles[i]).addClass('cartoonBtn').attr({'data-name': cartoonTitles[i]});
         $('#cartoonButtons').append(cartoonBtn);
     }
-    
+
+    $('.cartoonBtn').on('click', function(){
+        $('.display').empty();
+        var thisShow = $(this).data('name');
+        var giphyURL = "http://api.giphy.com/v1/gifs/search?q=cartoons" + thisShow + "&limit=10&api_key=&limit=10&api_key=CTIpo3dzNWhgdTFPBKdW5z3SV3F7ce7q";
+        $.ajax({url: giphyURL, method: 'GET'}).done(function(giphy){
+           currentGif = giphy.data;
+           $.each(currentGif, function(index, value){
+               animatedGif = value.images.original.url;
+               pausedGif = value.images.original_still.url;
+               var thisRating = value.rating;
+               if(thisRating == ''){
+                   thisRating = 'unrated';
+               }
+               var rating = $('<h5>').html('rated: '+thisRating).addClass('ratingStyle');
+               stillGif = $('<img>').attr('data-animated', animatedGif).attr('data-paused', pausedGif).attr('src', pausedGif).addClass('playOnHover');
+               var gifDisplay = $('<button>').append(rating, stillGif);
+               $('.display').append(gifDisplay);
+           });
+        });
+    });
 }
+
+$(document).on('mouseover','.playOnHover', function(){
+    $(this).attr('src', $(this).data('animated'));
+});
+$(document).on('mouseleave','.playOnHover', function(){
+    $(this).attr('src', $(this).data('paused'));
+});
+
+//sets a button from input
+$('#showsAdded').on('click', function(){
+var newShow = $('#newShowInput').val().trim();
+cartoonTitles.push(newShow);
+createButtons();
+return false;
+});
+
+createButtons();
