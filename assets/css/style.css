@@ -1,0 +1,17 @@
+img {
+    max-height: 150px;
+}
+
+form,
+.cartoonBtn {
+    background-color: darkgrey;
+    color: black;
+}
+
+form {
+    padding: 10px;
+}
+
+#newShowInput {
+    color: black;
+}
